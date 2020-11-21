@@ -31,14 +31,23 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/about',
-        name: 'About',
-        meta: { title: '关于' },
+        path: '/member',
+        name: 'Member',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         components: {
-          content: () => import(/* webpackChunkName: "about" */ '@/views/about/index.vue')
+          content: () => import(/* webpackChunkName: "about" */ '@/views/member/index.vue')
+        }
+      },
+      {
+        path: '/orderList',
+        name: 'OrderList',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        components: {
+          content: () => import(/* webpackChunkName: "about" */ '@/views/order-list/index.vue')
         }
       }
     ]

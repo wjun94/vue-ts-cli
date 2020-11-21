@@ -2,18 +2,24 @@
   <a-layout class="home-page">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo" />
-      <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
-        <a-menu-item key="1">
-          <user-outlined />
-          <span>商品管理</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <video-camera-outlined />
-          <span>订单管理</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span>会员管理</span>
+      <a-menu
+        theme="dark"
+        mode="inline"
+        @click="onMenu"
+        v-model:selectedKeys="selectedKeys"
+      >
+        <a-menu-item v-for="(item, index) in tabs" :key="String(index)">
+          <!-- <user-outlined /> -->
+          <component
+            :is="
+              index === 0
+                ? 'GiftOutlined'
+                : index === 1
+                ? 'FileTextOutlined'
+                : 'UserOutlined'
+            "
+          />
+          <span>{{ item }}</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -45,8 +51,8 @@ import { Options, Vue } from "vue-class-component";
 import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 import {
   UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
+  FileTextOutlined,
+  GiftOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons-vue";
@@ -55,15 +61,21 @@ import {
   components: {
     HelloWorld,
     UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
+    FileTextOutlined,
+    GiftOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
   },
 })
 export default class Home extends Vue {
-  private selectedKeys = ["1"];
-  private collapsed = false;
+  private selectedKeys = ["0"]; // 选中tab
+  private collapsed = false; // 显示/隐藏左边tab
+  private tabs = ["商品管理", "订单管理", "会员管理"];
+
+  private onMenu(keys: any) {
+    const { key } = keys;
+    this.$router.push(key === "0" ? "/" : key === "1" ? "orderList" : "member");
+  }
 }
 </script>
 

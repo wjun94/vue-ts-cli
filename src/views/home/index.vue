@@ -36,6 +36,11 @@
           @click="() => (collapsed = !collapsed)"
         />
       </a-layout-header>
+      <a-breadcrumb style="margin: 16px 20px">
+        <a-breadcrumb-item>{{
+          tabs[Number(selectedKeys[0])]
+        }}</a-breadcrumb-item>
+      </a-breadcrumb>
       <a-layout-content class="content">
         <router-view name="content" />
       </a-layout-content>

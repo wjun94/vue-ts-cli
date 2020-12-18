@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/home/index.vue'
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'Login',
@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/',
         name: 'Commodity',
-        meta: { title: '商品管理' },
+        meta: { title: '商品管理', icon: 'el-icon-shopping-bag-2' },
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -33,19 +33,28 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/member',
         name: 'Member',
+        meta: { title: '会员管理', icon: 'el-icon-user' },
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         components: {
           content: () => import(/* webpackChunkName: "about" */ '@/views/member/index.vue')
-        }
+        },
+        children: [
+          {
+            path: '/orderList1',
+            name: 'OrderList1',
+            meta: { title: '订单列表' },
+            components: {
+              content: () => import(/* webpackChunkName: "about" */ '@/views/order-list/index.vue')
+            }
+          }
+        ]
       },
       {
         path: '/orderList',
         name: 'OrderList',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
+        meta: { title: '订单列表', icon: 'el-icon-s-order' },
         components: {
           content: () => import(/* webpackChunkName: "about" */ '@/views/order-list/index.vue')
         }

@@ -1,88 +1,79 @@
 <template>
-  <a-layout class="home-page">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <div class="logo" />
-      <a-menu
-        theme="dark"
-        mode="inline"
-        @click="onMenu"
-        v-model:selectedKeys="selectedKeys"
-      >
-        <a-menu-item v-for="(item, index) in tabs" :key="String(index)">
-          <!-- <user-outlined /> -->
-          <component
-            :is="
-              index === 0
-                ? 'GiftOutlined'
-                : index === 1
-                ? 'FileTextOutlined'
-                : 'UserOutlined'
-            "
-          />
-          <span>{{ item }}</span>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <menu-unfold-outlined
-          v-if="collapsed"
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-        <menu-fold-outlined
-          v-else
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-      </a-layout-header>
-      <a-breadcrumb style="margin: 16px 20px">
-        <a-breadcrumb-item>{{
-          tabs[Number(selectedKeys[0])]
-        }}</a-breadcrumb-item>
-      </a-breadcrumb>
-      <a-layout-content class="content">
-        <router-view name="content" />
-      </a-layout-content>
-      <a-layout-footer style="text-align: center">
-        后台管理系统 ©2020
-      </a-layout-footer>
-    </a-layout>
-  </a-layout>
+  <el-container class="home-page">
+    <el-menu
+      background-color="#031529"
+      text-color="#fff"
+      :collapse="isCollapse"
+      mode="vertical"
+      :unique-opened="true"
+      :router="true"
+      :collapse-transition="false"
+      :default-openeds="['0']"
+    >
+      <div class="logo">
+        <span>欢迎...</span>
+      </div>
+      <template v-for="(item, i) of routes" :key="item.name">
+        <el-submenu v-if="item.children" :index="item.path">
+          <template #title>
+            <i :class="item.meta.icon"></i>
+            <span>{{ item.meta.title }}</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item
+              v-for="(child, idx) of item.children"
+              :key="i + '-' + idx"
+              :index="child.path"
+              >选项1
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-menu-item v-else :index="item.path">
+          <i :class="item.meta.icon"></i>
+          <template #title
+            ><span>{{ item.meta.title }}</span></template
+          >
+        </el-menu-item>
+      </template>
+    </el-menu>
+
+    <el-container>
+      <el-main>
+        <header class="both-sides-center">
+          <i
+            @click="onIcon"
+            :class="[!isCollapse ? 'el-icon-s-fold' : 'el-icon-s-unfold']"
+            style="margin-right: 15px"
+          ></i>
+          <el-button>退出</el-button>
+        </header>
+        <div class="main">
+          <!-- <el-breadcrumb separator="/">
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+          </el-breadcrumb> -->
+          <router-view name="content" />
+        </div>
+      </el-main>
+      <!-- <el-footer> 后台管理系统 ©2020 </el-footer> -->
+    </el-container>
+  </el-container>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-import {
-  UserOutlined,
-  FileTextOutlined,
-  GiftOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from "@ant-design/icons-vue";
+<script lang='ts'>
+import { Vue } from "vue-class-component";
+import { routes } from "@/router";
 
-@Options({
-  components: {
-    HelloWorld,
-    UserOutlined,
-    FileTextOutlined,
-    GiftOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-  },
-})
 export default class Home extends Vue {
-  private selectedKeys = ["0"]; // 选中tab
-  private collapsed = false; // 显示/隐藏左边tab
-  private tabs = ["商品管理", "订单管理", "会员管理"];
+  private isCollapse = false;
+  private routes = routes[1].children;
 
-  private onMenu(keys: any) {
-    const { key } = keys;
-    this.$router.push(key === "0" ? "/" : key === "1" ? "orderList" : "member");
+  private onIcon() {
+    this.isCollapse = !this.isCollapse;
   }
 }
 </script>
+
 
 <style scoped lang='less'>
 @import "./index.less";
